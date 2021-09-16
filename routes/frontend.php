@@ -20,3 +20,4 @@ Route::get('room', function () {
 });
 
 Route::get('all-room', [RoomController::class, 'index']);
+Route::get('single-room/{id}', [RoomController::class, 'singleRoomDetails']);

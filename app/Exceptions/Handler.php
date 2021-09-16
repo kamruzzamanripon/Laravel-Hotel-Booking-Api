@@ -2,7 +2,14 @@
 
 namespace App\Exceptions;
 
+use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -34,8 +41,63 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        // $this->reportable(function (Throwable $e) {
+           
+        // });
+
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            if($request->is('api/*')){
+                return response()->json([
+                    'getMessage' => "The specified URL cannot be found @R"
+                ],404);
+            }
         });
+
+        $this->renderable(function (ModelNotFoundException $e, $request) {
+            if($request->is('api/*')){
+                $modelName = strtolower(class_basename($e->getModel()));
+                return response()->json([
+                    'getMessage' => "Does not exists any {$modelName} with the specified identificator @R"
+                ],404);
+            }
+        });
+
+        $this->renderable(function (AuthorizationException $e, $request) {
+            if($request->is('api/*')){
+                return response()->json([
+                    $e->getMessage()
+                ],403);
+            }
+        });
+
+        $this->renderable(function (MethodNotAllowedHttpException $e, $request) {
+            if($request->is('api/*')){
+                return response()->json([
+                    'getMessage' => "The specified method for the request is invalid @R"
+                ],405);
+            }
+        }); 
+
+        $this->renderable(function (HttpException $e, $request) {
+            if($request->is('api/*')){
+                return response()->json([
+                    $e->getMessage()
+                ],$e->getStatusCode());
+            }
+        });
+
+
+        $this->renderable(function (QueryException $e, $request) {
+            if($request->is('api/*')){
+                $errorCode = $e->errorInfo[1];
+                if ($errorCode == 1451) {
+                    return response()->json([
+                        'getMessage' => "Cannot remove this resource permanently. It is related with any other resource @R"
+                    ],409);
+                }
+            }
+        }); 
+
+        
     }
 }
