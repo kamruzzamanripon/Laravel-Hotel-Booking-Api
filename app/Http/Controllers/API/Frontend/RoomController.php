@@ -19,6 +19,7 @@ class RoomController extends Controller
 
     public function index()
     {
+        //try to comment data for line
         try{
             $allRoom = $this->RoomRepository->index();
 
