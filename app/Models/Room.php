@@ -11,9 +11,10 @@ class Room extends Model
     use HasFactory, Uuid;
 
     protected $guarded = [];
-    protected $primaryKey = 'uuid';
+    //protected $primaryKey = 'uuid';
     protected $keyType = 'string';
     public $incrementing = false;
+    
 
     public function category()
     {

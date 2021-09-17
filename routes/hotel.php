@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\API\Frontend\RoomController;
+use App\Http\Controllers\API\RoomController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +21,6 @@ Route::get('room', function () {
 
 Route::get('all-room', [RoomController::class, 'index']);
 Route::get('single-room/{id}', [RoomController::class, 'singleRoomDetails']);
+Route::post('single-room-create', [RoomController::class, 'singleRoomCreate']);
+Route::put('single-room-update/{id}', [RoomController::class, 'singleRoomUpdate']);
+Route::delete('single-room-delete/{id}', [RoomController::class, 'singleRoomDelete']);

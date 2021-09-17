@@ -19,7 +19,7 @@ class CreateRoomsTable extends Migration
             $table->string('room_name');
             $table->float('pricePerNight',8,2);
             $table->string('description');
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->float('guestCapacity',8,2);
             $table->float('numOfBeds',8,2);
             $table->boolean('internet')->default(false);
