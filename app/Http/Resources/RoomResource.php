@@ -31,6 +31,9 @@ class RoomResource extends JsonResource
             'image' => $this->image,
             'category_id' => $this->category_id,
             'category' => $this->category,
+            'reviews' => $this->reviews,
+            'reviewAverage' => $this->reviews->avg('rating'),
+            'numOfReviews' => $this->reviews->count(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
            

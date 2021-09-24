@@ -14,7 +14,7 @@ class RoomRepository implements CrudInterface{
 
     public function index(){
 
-        $allRooms = Room::with('category')->paginate(3);
+        $allRooms = Room::with('category', 'reviews', 'reviews.user')->paginate(8);
         $allRooms = RoomResource::collection($allRooms)->response()->getData(true); 
         //$allRooms = new RoomResource($allRooms);
     
