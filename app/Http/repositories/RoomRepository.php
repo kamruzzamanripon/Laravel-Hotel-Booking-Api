@@ -14,7 +14,7 @@ class RoomRepository implements CrudInterface{
 
     public function index(){
 
-        $allRooms = Room::with('category', 'reviews', 'reviews.user')->paginate(8);
+        $allRooms = Room::with('category', 'reviews', 'reviews.user')->orderBy('created_at', 'desc')->paginate(8);
         $allRooms = RoomResource::collection($allRooms)->response()->getData(true); 
         //$allRooms = new RoomResource($allRooms);
     
@@ -23,7 +23,7 @@ class RoomRepository implements CrudInterface{
 
     
     public function show($id){
-        $singleRoom = Room::with('category')->where('id', $id)->firstOrFail();
+        $singleRoom = Room::with('category', 'reviews.user')->where('id', $id)->firstOrFail();
         $singleRoom = new RoomResource($singleRoom);
         
         return $singleRoom;
@@ -32,15 +32,29 @@ class RoomRepository implements CrudInterface{
 
     public function store(Request $request){
         //Storage Image 
-        if($request->hasFile('image')){
-            $destination_path = 'public/image/room';
-            $image = $request->file('image');
-            //$image_name = $image->getClientOriginalName();
-            $image_name = Carbon::now()->toDateString()."_".rand(666561, 544614449)."_.".$request->image->getClientOriginalExtension();
-            $path = $request->file('image')->storeAs($destination_path, $image_name);
+        // if($request->hasFile('image')){
+        //     $destination_path = 'public/image/room';
+        //     $image = $request->file('image');
+        //     //$image_name = $image->getClientOriginalName();
+        //     $image_name = Carbon::now()->toDateString()."_".rand(666561, 544614449)."_.".$request->image->getClientOriginalExtension();
+        //     $path = $request->file('image')->storeAs($destination_path, $image_name);
+        // }
+
+        $data = [];
+        if($request->hasfile('image'))
+        {$destination_path = 'public/image/room';
+            foreach($request->file('image') as $file)
+
+            {
+                
+                //$name=$file->getClientOriginalName();    
+                $name = Carbon::now()->toDateString()."_".rand(666561, 544614449)."_.".$file->getClientOriginalExtension();
+                $path = $file->storeAs($destination_path, $name);     
+                $data[] = 'storage/image/room/' . $name;  
+            }
         }
-        
-        
+
+        //return dd($request->image);
         $newRoom = new Room;
 
         $newRoom->room_name = $request->room_name;
@@ -54,7 +68,8 @@ class RoomRepository implements CrudInterface{
         $newRoom->airConditioned = $request->airConditioned ? $request->airConditioned : false;
         $newRoom->petsAllowed = $request->petsAllowed ? $request->petsAllowed : false;
         $newRoom->roomCleaning = $request->roomCleaning ? $request->roomCleaning : false;
-        $newRoom->image = isset($image_name) ? 'storage/image/room/' . $image_name : '' ;
+        //$newRoom->image = isset($image_name) ? 'storage/image/room/' . $image_name : '' ;
+        $newRoom->image = json_encode($data); 
         $newRoom->category_id = $request->category_id;
         //$newRoom->user_id = auth()->user()->id;
         $newRoom->save();
