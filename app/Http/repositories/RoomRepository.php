@@ -31,7 +31,7 @@ class RoomRepository implements CrudInterface{
 
 
     public function store(Request $request){
-        //Storage Image 
+        //Storage For Single Image 
         // if($request->hasFile('image')){
         //     $destination_path = 'public/image/room';
         //     $image = $request->file('image');
@@ -40,13 +40,12 @@ class RoomRepository implements CrudInterface{
         //     $path = $request->file('image')->storeAs($destination_path, $image_name);
         // }
 
+        //Storage For Multiple Image
         $data = [];
         if($request->hasfile('image'))
-        {$destination_path = 'public/image/room';
+                {$destination_path = 'public/image/room';
             foreach($request->file('image') as $file)
-
-            {
-                
+              {
                 //$name=$file->getClientOriginalName();    
                 $name = Carbon::now()->toDateString()."_".rand(666561, 544614449)."_.".$file->getClientOriginalExtension();
                 $path = $file->storeAs($destination_path, $name);     
@@ -54,7 +53,6 @@ class RoomRepository implements CrudInterface{
             }
         }
 
-        //return dd($request->image);
         $newRoom = new Room;
 
         $newRoom->room_name = $request->room_name;
