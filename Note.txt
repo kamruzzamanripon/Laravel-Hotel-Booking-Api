@@ -1,1 +1,7 @@
 	1.Dummy Data. use Factory for collect dummy data.
+	
+## Room Api
+	1. Use Repositories Pattern
+	2. Seperate Requests file and apply custom varifacation message.
+	3. Multiple Image and save image json format.
+	4. Use Eager Loading relationship and use next eager loading
