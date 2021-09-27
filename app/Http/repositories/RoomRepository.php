@@ -12,9 +12,28 @@ use Illuminate\Support\Facades\Validator;
 
 class RoomRepository implements CrudInterface{
 
-    public function index(){
+    public function index($request){
+        //return dd($request->loaction);
+        $location =$request->location; 
+        $guests =$request->guests; 
+        $category =$request->category; 
+        
+        
+        // if($search){
+        //     $allRooms = Room::with('category', 'reviews', 'reviews.user')->where('address', 'LIKE', '%'.$search.'%')->orderBy('created_at', 'desc')->paginate(8);
+        // }else{
+        //     $allRooms = Room::with('category', 'reviews', 'reviews.user')->orderBy('created_at', 'desc')->paginate(8);
+        // }
 
-        $allRooms = Room::with('category', 'reviews', 'reviews.user')->orderBy('created_at', 'desc')->paginate(8);
+        $allRooms = Room::with('category', 'reviews', 'reviews.user')
+                    ->where('address', 'LIKE', '%'.$location.'%')
+                    ->where('guestCapacity', 'LIKE', '%'.$guests.'%')
+                    ->whereHas('category', function($q) use ($category){
+                        $q->where('room_category', 'LIKE', '%'.$category.'%');
+                    })
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(8);
+
         $allRooms = RoomResource::collection($allRooms)->response()->getData(true); 
         //$allRooms = new RoomResource($allRooms);
     
