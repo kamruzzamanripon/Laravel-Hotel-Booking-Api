@@ -18,10 +18,10 @@ class RoomController extends Controller
         $this->RoomRepository = $RoomRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try{
-            $allRoom = $this->RoomRepository->index();
+            $allRoom = $this->RoomRepository->index($request);
 
             return response()->json([
                 'success' => true,
