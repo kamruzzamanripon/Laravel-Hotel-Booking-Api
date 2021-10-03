@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\API\RoomController;
+use App\Http\Controllers\API\UserController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,8 +21,20 @@ Route::get('room', function () {
     return "hello Ripon, how are youxxx";
 });
 
+Route::post('login', [UserController::class, "login"]);
+Route::post('register', [UserController::class, 'register']);
+
+
+
 Route::get('all-room', [RoomController::class, 'index']);
-Route::get('single-room/{id}', [RoomController::class, 'singleRoomDetails']);
-Route::post('single-room-create', [RoomController::class, 'singleRoomCreate']);
-Route::put('single-room-update/{id}', [RoomController::class, 'singleRoomUpdate']);
-Route::delete('single-room-delete/{id}', [RoomController::class, 'singleRoomDelete']);
+
+
+Route::group(["middleware" => ["auth:sanctum"]], function(){
+    Route::post('logout', [UserController::class, "logout"]);
+    
+    Route::get('single-room/{id}', [RoomController::class, 'singleRoomDetails']);
+    Route::post('single-room-create', [RoomController::class, 'singleRoomCreate']);
+    Route::put('single-room-update/{id}', [RoomController::class, 'singleRoomUpdate']);
+    Route::delete('single-room-delete/{id}', [RoomController::class, 'singleRoomDelete']);
+});
+

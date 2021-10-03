@@ -23,6 +23,7 @@ class RoomRequest extends FormRequest
      */
     public function rules()
     {
+        //Post and update request 
         if(request()->isMethod('post')) {
             return [
                 'room_name' => 'required|string|max:258|unique:rooms',
