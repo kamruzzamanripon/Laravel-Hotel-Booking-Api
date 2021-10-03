@@ -21,18 +21,20 @@ Route::get('room', function () {
     return "hello Ripon, how are youxxx";
 });
 
-Route::get('single-room/{id}', [RoomController::class, 'singleRoomDetails']);
-Route::post('single-room-create', [RoomController::class, 'singleRoomCreate']);
-Route::put('single-room-update/{id}', [RoomController::class, 'singleRoomUpdate']);
-Route::delete('single-room-delete/{id}', [RoomController::class, 'singleRoomDelete']);
-
-
-//User 
-//Route::get('login', [UserController::class, "index"])->name('login');
 Route::post('login', [UserController::class, "login"]);
+Route::post('register', [UserController::class, 'register']);
 
-Route::middleware('auth:sanctum')->group(function(){
-    Route::get('all-room', [RoomController::class, 'index']);
+
+
+Route::get('all-room', [RoomController::class, 'index']);
+
+
+Route::group(["middleware" => ["auth:sanctum"]], function(){
     Route::post('logout', [UserController::class, "logout"]);
-
+    
+    Route::get('single-room/{id}', [RoomController::class, 'singleRoomDetails']);
+    Route::post('single-room-create', [RoomController::class, 'singleRoomCreate']);
+    Route::put('single-room-update/{id}', [RoomController::class, 'singleRoomUpdate']);
+    Route::delete('single-room-delete/{id}', [RoomController::class, 'singleRoomDelete']);
 });
+
