@@ -42,7 +42,8 @@ class UserController extends Controller
                     return response()->json([
                         "success" => true,
                         "message" => "User logged in successfully",
-                        "access_token" => $token
+                        "access_token" => $token,
+                        "user_info" => $user
                     ])->withCookie($cookie);
                 }else{
     
@@ -100,7 +101,8 @@ class UserController extends Controller
 
             return response()->json([
                 "success" => true,
-                "message" => "registered succesfully"
+                "message" => "registered succesfully",
+                "newUser" => $newUser
             ]);
 
         }catch(Exception $e){

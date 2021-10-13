@@ -26,20 +26,20 @@ class RoomRequest extends FormRequest
         //Post and update request 
         if(request()->isMethod('post')) {
             return [
-                'room_name' => 'required|string|max:258|unique:rooms',
-                'pricePerNight' => 'required',
-                'description' => 'required|string',
-                'address' => 'required|string',
-                'guestCapacity' => 'required',
-                'numOfBeds' => 'required',
+                'room_name' => ['required|string|max:258|unique:rooms'],
+                'pricePerNight' => ['required'],
+                'description' => ['required|string'],
+                'address' => ['required|string'],
+                'guestCapacity' => ['required'],
+                'numOfBeds' => ['required'],
                 //'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 
             ];
         } else {
             return [
-                'room_name' => 'required|string|max:258',
+                'room_name' => ['required|string|max:258'],
                 //'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'description' => 'required|string'
+                'description' => ['required|string']
             ];
         }
 
