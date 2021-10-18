@@ -1,6 +1,8 @@
 <?php
 
 //header('Access-Control-Allow-Headers: Authorization');
+
+use App\Http\Controllers\API\BookingPaymentController;
 use App\Http\Controllers\API\RoomController;
 use App\Http\Controllers\API\UserController;
 use App\Models\User;
@@ -40,5 +42,9 @@ Route::group(["middleware" => ["auth:sanctum"]], function(){
     Route::post('single-room-create', [RoomController::class, 'singleRoomCreate']);
     Route::put('single-room-update/{id}', [RoomController::class, 'singleRoomUpdate']);
     Route::delete('single-room-delete/{id}', [RoomController::class, 'singleRoomDelete']);
+
+    //booking/?id=${id}&checkin=${checkin}&checkout=${checkout}
+    Route::get('booking', [BookingPaymentController::class, 'bookingRoom']);
+    Route::get('booking-date/{id}', [BookingPaymentController::class, 'bookingDateCollection']);
 });
 
